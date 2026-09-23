@@ -1,0 +1,15 @@
+names:
+- Hardhat
+- Mask
+- NO-Hardhat
+- NO-Mask
+- NO-Safety Vest
+- Person
+- Safety Cone
+- Safety Vest
+- machinery
+- vehicle
+nc: 10
+test: /kaggle/input/construction-site-safety-image-dataset-roboflow/css-data/test
+train: /kaggle/input/construction-site-safety-image-dataset-roboflow/css-data/train
+val: /kaggle/input/construction-site-safety-image-dataset-roboflow/css-data/valid

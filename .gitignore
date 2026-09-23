@@ -38,4 +38,5 @@ dist/
 .ipynb_checkpoints/
 
 # YOLO / Ultralytics generated files
-runs/
+runs/__pycache__/
+*.pyc

@@ -49,7 +49,7 @@ def index():
 
 @app.get("/videos")
 def list_videos():
-    """List available prerecorded videos in the video/ directory."""
+    # List available prerecorded videos in the video/ directory.
     files = [
         f for f in os.listdir(VIDEO_DIR)
         if os.path.splitext(f)[1].lower() in ALLOWED_EXT

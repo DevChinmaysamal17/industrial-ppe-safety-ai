@@ -1,282 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<title>PFE (PPE) Detection</title>
-<style>
-  * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    font-family: -apple-system, Segoe UI, Roboto, sans-serif;
-    background: #0f172a;
-    color: #f1f5f9;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 24px 16px 48px;
-  }
-  h1 { font-size: 22px; margin-bottom: 4px; }
-  p.sub { color: #94a3b8; margin-top: 0; margin-bottom: 20px; font-size: 14px; }
-
-  .toggle {
-    display: flex;
-    background: #1e293b;
-    border-radius: 999px;
-    padding: 4px;
-    margin-bottom: 16px;
-  }
-  .toggle button {
-    border: none;
-    background: transparent;
-    color: #94a3b8;
-    padding: 10px 22px;
-    border-radius: 999px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.15s ease;
-  }
-  .toggle button.active { background: #22c55e; color: #052e12; }
-
-  .video-panel {
-    width: 100%;
-    max-width: 800px;
-    background: #1e293b;
-    border-radius: 12px;
-    padding: 16px;
-    margin-bottom: 16px;
-    display: none;
-    gap: 12px;
-    flex-direction: column;
-  }
-  .video-panel.visible { display: flex; }
-  .video-panel label {
-    font-size: 12px;
-    color: #94a3b8;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-  }
-  select, input[type="file"] {
-    background: #0f172a;
-    color: #f1f5f9;
-    border: 1px solid #334155;
-    border-radius: 8px;
-    padding: 10px 12px;
-    font-size: 14px;
-  }
-  .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-  button.action {
-    background: #22c55e;
-    color: #052e12;
-    border: none;
-    padding: 10px 18px;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 13px;
-    cursor: pointer;
-  }
-  button.action:disabled { background: #334155; color: #64748b; cursor: not-allowed; }
-
-  .frame-wrap {
-    position: relative;
-    width: 100%;
-    max-width: 800px;
-    border-radius: 12px;
-    overflow: hidden;
-    background: #000;
-    box-shadow: 0 0 0 1px #1e293b;
-    min-height: 200px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  #feed { width: 100%; display: block; }
-  .placeholder { color: #475569; font-size: 13px; padding: 40px; text-align: center; }
-
-  .status {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 14px;
-    font-size: 13px;
-    color: #94a3b8;
-  }
-  .dot {
-    width: 8px; height: 8px; border-radius: 50%;
-    background: #22c55e; box-shadow: 0 0 6px #22c55e;
-  }
-  .reload-btn {
-    margin-top: 14px;
-    background: #1e293b;
-    color: #f1f5f9;
-    border: 1px solid #334155;
-    padding: 8px 16px;
-    border-radius: 8px;
-    font-size: 13px;
-    cursor: pointer;
-  }
-  .reload-btn:hover { background: #334155; }
-  .upload-status { font-size: 12px; color: #94a3b8; }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PPE Detection</title>
+  <link rel="stylesheet" href="/static/style.css">
 </head>
+
 <body>
-
-  <h1>PFE (PPE) Detection</h1>
-  <p class="sub">Live safety-equipment detection feed</p>
-
-  <div class="toggle">
-    <button id="btn-webcam" class="active">Live Camera</button>
-    <button id="btn-video">Prerecorded Video</button>
-  </div>
-
-  <div class="video-panel" id="video-panel">
-    <div>
-      <label for="video-select">Choose a video from video/</label>
-      <div class="row">
-        <select id="video-select"></select>
-        <button class="action" id="load-video-btn">Load</button>
+  <main class="container">
+    <header class="header">
+      <div>
+        <h1>PPE Detection</h1>
+        <p>Live safety-equipment detection system</p>
       </div>
+    </header>
+    <!-- Source Toggle -->
+    <div class="source-toggle">
+      <button id="btn-webcam" class="toggle-btn active">
+        Live Camera
+      </button>
+      <button id="btn-video" class="toggle-btn">
+        Video
+      </button>
     </div>
-    <div>
-      <label for="video-upload">Or upload a new video</label>
-      <div class="row">
-        <input type="file" id="video-upload" accept=".mp4,.mov,.avi,.mkv">
-        <button class="action" id="upload-btn">Upload &amp; Play</button>
+    <!-- Video Selection -->
+    <section class="video-panel" id="video-panel">
+      <div class="panel-title">Video Source</div>
+      <div class="video-select-section">
+        <label for="video-select">Select a video from video/</label>
+        <div class="input-row">
+          <select id="video-select">
+            <option value="">Select a video...</option>
+          </select>
+          <button class="primary-btn" id="load-video-btn">
+            Load Video
+          </button>
+        </div>
+      </div>
+      <div class="divider">
+        <span>OR</span>
+      </div>
+      <div class="upload-section">
+        <label for="video-upload">Upload a video</label>
+        <div class="input-row">
+          <input type="file" id="video-upload" accept=".mp4,.mov,.avi,.mkv">
+          <button class="primary-btn" id="upload-btn">
+            Upload & Play
+          </button>
+        </div>
         <span class="upload-status" id="upload-status"></span>
       </div>
+    </section>
+    <!-- Detection Feed -->
+    <section class="video-container">
+      <img id="feed" alt="PPE detection feed">
+      <div class="placeholder" id="placeholder">
+        <div class="placeholder-title">No video selected</div>
+        <div class="placeholder-text">
+          Select a video source to start detection
+        </div>
+      </div>
+    </section>
+    <!-- Status -->
+    <div class="status">
+      <span class="status-dot"></span>
+      <span id="status-text">
+        Source: Live Camera
+      </span>
     </div>
-  </div>
-
-  <div class="frame-wrap">
-    <img id="feed" style="display:none;" alt="detection feed">
-    <div class="placeholder" id="placeholder">Select a source to start the feed</div>
-  </div>
-
-  <div class="status">
-    <span class="dot"></span>
-    <span id="status-text">Source: Live Camera</span>
-  </div>
-
-  <button class="reload-btn" id="reload-btn">Restart Stream</button>
-
-<script>
-  const feed = document.getElementById('feed');
-  const placeholder = document.getElementById('placeholder');
-  const btnWebcam = document.getElementById('btn-webcam');
-  const btnVideo = document.getElementById('btn-video');
-  const videoPanel = document.getElementById('video-panel');
-  const videoSelect = document.getElementById('video-select');
-  const loadVideoBtn = document.getElementById('load-video-btn');
-  const uploadInput = document.getElementById('video-upload');
-  const uploadBtn = document.getElementById('upload-btn');
-  const uploadStatus = document.getElementById('upload-status');
-  const statusText = document.getElementById('status-text');
-  const reloadBtn = document.getElementById('reload-btn');
-
-  let currentMode = 'webcam';
-  let currentFilename = '';
-
-  function showFeed(url, label) {
-    feed.src = url;
-    feed.style.display = 'block';
-    placeholder.style.display = 'none';
-    statusText.textContent = `Source: ${label}`;
-  }
-
-  function startWebcam() {
-    currentMode = 'webcam';
-    showFeed(`/video_feed?mode=webcam&t=${Date.now()}`, 'Live Camera');
-  }
-
-  function startVideo(filename) {
-    if (!filename) return;
-    currentMode = 'video';
-    currentFilename = filename;
-    showFeed(`/video_feed?mode=video&filename=${encodeURIComponent(filename)}&t=${Date.now()}`, `Video (${filename})`);
-  }
-
-  async function refreshVideoList(selectFilename) {
-    try {
-      const res = await fetch('/videos');
-      const data = await res.json();
-      videoSelect.innerHTML = '';
-      data.videos.forEach(name => {
-        const opt = document.createElement('option');
-        opt.value = name;
-        opt.textContent = name;
-        videoSelect.appendChild(opt);
-      });
-      if (selectFilename) {
-        videoSelect.value = selectFilename;
-      }
-    } catch (e) {
-      console.error('Failed to load video list', e);
-    }
-  }
-
-  btnWebcam.addEventListener('click', () => {
-    btnWebcam.classList.add('active');
-    btnVideo.classList.remove('active');
-    videoPanel.classList.remove('visible');
-    startWebcam();
-  });
-
-  btnVideo.addEventListener('click', async () => {
-    btnVideo.classList.add('active');
-    btnWebcam.classList.remove('active');
-    videoPanel.classList.add('visible');
-    await refreshVideoList();
-    // auto-load the first video in the list, if any
-    if (videoSelect.options.length > 0) {
-      startVideo(videoSelect.value);
-    } else {
-      feed.style.display = 'none';
-      placeholder.style.display = 'block';
-      placeholder.textContent = 'No videos found — upload one below';
-    }
-  });
-
-  loadVideoBtn.addEventListener('click', () => {
-    startVideo(videoSelect.value);
-  });
-
-  uploadBtn.addEventListener('click', async () => {
-    const file = uploadInput.files[0];
-    if (!file) {
-      uploadStatus.textContent = 'Choose a file first';
-      return;
-    }
-    uploadStatus.textContent = 'Uploading...';
-    const formData = new FormData();
-    formData.append('file', file);
-
-    try {
-      const res = await fetch('/upload_video', { method: 'POST', body: formData });
-      const data = await res.json();
-      if (data.error) {
-        uploadStatus.textContent = `Error: ${data.error}`;
-        return;
-      }
-      uploadStatus.textContent = `Uploaded: ${data.filename}`;
-      await refreshVideoList(data.filename);
-      startVideo(data.filename);
-    } catch (e) {
-      uploadStatus.textContent = 'Upload failed';
-      console.error(e);
-    }
-  });
-
-  reloadBtn.addEventListener('click', () => {
-    if (currentMode === 'webcam') {
-      startWebcam();
-    } else if (currentFilename) {
-      startVideo(currentFilename);
-    }
-  });
-
-  // default: live camera on load
-  startWebcam();
-</script>
-
+    <button class="restart-btn" id="reload-btn">
+      Restart Stream
+    </button>
+  </main>
+  <script src="/static/script.js"></script>
 </body>
+
 </html>

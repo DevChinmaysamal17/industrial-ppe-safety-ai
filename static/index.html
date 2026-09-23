@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>PFE (PPE) Detection</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, Segoe UI, Roboto, sans-serif;
+    background: #0f172a;
+    color: #f1f5f9;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 16px 48px;
+  }
+  h1 {
+    font-size: 22px;
+    margin-bottom: 4px;
+  }
+  p.sub {
+    color: #94a3b8;
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 14px;
+  }
+  .toggle {
+    display: flex;
+    background: #1e293b;
+    border-radius: 999px;
+    padding: 4px;
+    margin-bottom: 20px;
+  }
+  .toggle button {
+    border: none;
+    background: transparent;
+    color: #94a3b8;
+    padding: 10px 22px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .toggle button.active {
+    background: #22c55e;
+    color: #052e12;
+  }
+  .frame-wrap {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #000;
+    box-shadow: 0 0 0 1px #1e293b;
+  }
+  #feed {
+    width: 100%;
+    display: block;
+  }
+  .status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 14px;
+    font-size: 13px;
+    color: #94a3b8;
+  }
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #22c55e;
+    box-shadow: 0 0 6px #22c55e;
+  }
+  .reload-btn {
+    margin-top: 14px;
+    background: #1e293b;
+    color: #f1f5f9;
+    border: 1px solid #334155;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  .reload-btn:hover {
+    background: #334155;
+  }
+</style>
+</head>
+<body>
+
+  <h1>PFE (PPE) Detection</h1>
+  <p class="sub">Live safety-equipment detection feed</p>
+
+  <div class="toggle">
+    <button id="btn-video" class="active">Prerecorded Video</button>
+    <button id="btn-webcam">Live Camera</button>
+  </div>
+
+  <div class="frame-wrap">
+    <img id="feed" src="/video_feed?mode=video" alt="detection feed">
+  </div>
+
+  <div class="status">
+    <span class="dot"></span>
+    <span id="status-text">Source: Prerecorded Video</span>
+  </div>
+
+  <button class="reload-btn" id="reload-btn">Restart Stream</button>
+
+<script>
+  const feed = document.getElementById('feed');
+  const btnVideo = document.getElementById('btn-video');
+  const btnWebcam = document.getElementById('btn-webcam');
+  const statusText = document.getElementById('status-text');
+  const reloadBtn = document.getElementById('reload-btn');
+
+  let currentMode = 'video';
+
+  function setMode(mode) {
+    currentMode = mode;
+    // cache-bust so the browser opens a fresh stream connection
+    feed.src = `/video_feed?mode=${mode}&t=${Date.now()}`;
+    statusText.textContent = `Source: ${mode === 'webcam' ? 'Live Camera' : 'Prerecorded Video'}`;
+    btnVideo.classList.toggle('active', mode === 'video');
+    btnWebcam.classList.toggle('active', mode === 'webcam');
+  }
+
+  btnVideo.addEventListener('click', () => setMode('video'));
+  btnWebcam.addEventListener('click', () => setMode('webcam'));
+  reloadBtn.addEventListener('click', () => setMode(currentMode));
+</script>
+
+</body>
+</html>
